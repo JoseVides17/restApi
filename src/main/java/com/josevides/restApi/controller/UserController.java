@@ -43,7 +43,7 @@ public class UserController {
             }
 
             if (!this.jwtUtil.verifyRole(jwt, "SUPER")){
-                return ResponseEntity.badRequest().body("Su rol no es valido.");
+                return ResponseEntity.badRequest().body("Su rol no cumple con los requisitos.");
             }
 
             UserResponse userResponse = this.userService.create(userRequest);
