@@ -1,23 +1,23 @@
-# Stage 1: Build
+# Etapa 1: Construcción
 FROM maven:3.9.5-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copy the project files to the container
+# Copiar archivos necesarios para construir el proyecto
 COPY pom.xml ./
 COPY src ./src
 
-# Package the application
+# Compilar y empaquetar la aplicación
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run
-FROM eclipse-temurin:21-jdk-jammy
+# Etapa 2: Ejecución
+FROM openjdk:21-jdk-slim
 WORKDIR /app
 
-# Expose the port Spring Boot runs on
+# Exponer el puerto por defecto de Spring Boot
 EXPOSE 8080
 
-# Copy the built JAR file from the build stage
-COPY --from=build /app/target/udemy-0.0.1-SNAPSHOT.jar app.jar
+# Copiar el archivo JAR desde la etapa anterior
+COPY --from=build /app/target/*.jar app.jar
 
-# Run the application
+# Comando para iniciar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
